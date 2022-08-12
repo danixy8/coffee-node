@@ -1,26 +1,29 @@
 const {response, request} = require('express');
+const User = require('../models/user');
 
-const usuariosGet = (req = request, res) =>{
+const usersGet = (req = request, res) =>{
   
-  const {nombre='no name', apikey, page=1, limit} = req.query;
+  const {name='no name', apikey, page=1, limit} = req.query;
 
   res.json({
     msg: "get API - controlador",
-    nombre, apikey, page, limit
+    name, apikey, page, limit
   });
 }
 
-const usuarioPost = (req, res) =>{
-  
-  const {nombre, edad} = req.body;
+const userPost = async(req, res) =>{
+
+  const body = req.body
+  const user = new User(body);
+
+  await user.save();
 
   res.json({
-    msg: "post API - controlador",
-    nombre, edad
+    user
   });
 }
 
-const usuarioPut = (req, res)=>{
+const userPut = (req, res)=>{
   const id = req.params.id;
   res.json({
     msg: "put API - controlador",
@@ -28,15 +31,15 @@ const usuarioPut = (req, res)=>{
   });
 }
 
-const usuarioDelete = (req, res)=>{
+const userDelete = (req, res)=>{
   res.json({
     msg: "delete API - controlador"
   });
 }
 
 module.exports = {
-  usuariosGet,
-  usuarioPost,
-  usuarioPut,
-  usuarioDelete
+  usersGet,
+  userPost,
+  userPut,
+  userDelete
 }
