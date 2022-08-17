@@ -53,9 +53,17 @@ const userPut = async(req, res)=>{
   res.json(user);
 }
 
-const userDelete = (req, res)=>{
+const userDelete = async(req, res)=>{
+  const { id } = req.params
+
+  //borrado fisico
+  // const user = await User.findByIdAndDelete( id );
+
+  //soft delete
+  const user = await User.findByIdAndUpdate(id, { state: false });
+
   res.json({
-    msg: "delete API - controlador"
+    user
   });
 }
 
