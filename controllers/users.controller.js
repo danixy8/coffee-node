@@ -58,12 +58,15 @@ const userDelete = async(req, res)=>{
 
   //borrado fisico
   // const user = await User.findByIdAndDelete( id );
-
+  
   //soft delete
   const user = await User.findByIdAndUpdate(id, { state: false });
+  //info de usuario dueno del token
+  // const authenticatedUser = req.user;
 
   res.json({
-    user
+    user,
+    // authenticatedUser
   });
 }
 
