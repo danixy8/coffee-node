@@ -28,7 +28,7 @@
   <script>
 
     var url = (window.location.hostname.includes('localhost'))
-              ? 'http://localhost:8080/api/auth/google'
+              ? 'http://localhost:8080'
               : 'https://rest-server-node66.herokuapp.com'
 
     function handleCredentialResponse(response) {
@@ -37,7 +37,7 @@
       const body = { id_token: response.credential}
 
       // console.log('id_token', response.credential)
-      fetch(url, {
+      fetch(`${url}/api/auth/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
