@@ -14,7 +14,7 @@ router.get('/', [
   query("limit", "value of 'limit' must be numeric")
     .isNumeric()
     .optional(),
-  query("from", "value of 'limit' must be numeric")
+  query("from", "value of 'from' must be numeric")
     .isNumeric()
     .optional(),
   validateFields
