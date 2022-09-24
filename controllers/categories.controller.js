@@ -2,7 +2,7 @@ const { response, request, query } = require("express");
 const { Category } = require("../models");
 
 //obtenerCategorias - paginado - total - populate
-const getCategories = async(req = request, res = response)=>{
+const getCategories = async(req, res)=>{
   const {limit = 5, from = 0} = req.query;
   const query = { state:true };
 
@@ -11,7 +11,7 @@ const getCategories = async(req = request, res = response)=>{
     Category.find(query)
       .skip(from)
       .limit(limit)
-      .populate('user')
+      .populate('user', 'name')
   ])
 
   res.status(200).json({
@@ -26,7 +26,7 @@ const getCategory = async(req, res)=>{
   
   const { id } = req.params
 
-  const category = await Category.findById(id, { name: 1 });
+  const category = await Category.findById(id).populate('user', 'name');
 
   res.status(200).json({
     category
@@ -64,17 +64,16 @@ const createCategory = async(req, res) => {
 //actualizarCategoria - recibe nombre
 const putCategory = async(req, res) => {
   const { id } = req.params;
-  const name = req.body.name.toUpperCase();
-  const user = req.user._id
+  const {state, user, ...data} = req.body;
+  
+  data.name = data.name.toUpperCase();
+  data.user = req.user._id;
 
   const category = await Category
-  .findOneAndUpdate({id}, {name, user }, {returnOriginal: false})
-  .populate('user');
+  .findOneAndUpdate(id, data, {returnOriginal: false})
+  .populate('user', 'name')
 
-  res.json({
-    name: category.name,
-    user: category.user
-  });
+  res.json(category);
 
 }
 
@@ -84,12 +83,12 @@ const deleteCategory = async(req, res)=>{
   const user = req.user._id
   
   //soft delete
-  const category = await Category
+  const categoryDeleted = await Category
   .findByIdAndUpdate(id, { state: false, user }, {returnOriginal: false})
-  .populate('user');
+  .populate('user', 'name')
 
-  res.json({
-    category
+  res.status(200).json({
+    categoryDeleted
   });
 }
 

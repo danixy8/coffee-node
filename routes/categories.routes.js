@@ -39,8 +39,11 @@ router.post('/', [
 router.put('/:id', [
   validateJWT,
   hasARole('ADMIN_ROLE', 'SALES_ROLE'),
+  check('name', 'name is required').not().isEmpty(),
   check('id', 'Not is a valid ID').isMongoId(),
+  validateFields,
   check('id').custom( existsCategoryById ),
+  validateFields
 ], putCategory);
 
 //borrar una categoria - admin
@@ -48,6 +51,7 @@ router.delete('/:id', [
   validateJWT,
   hasARole('ADMIN_ROLE'),
   check('id', 'Not is a valid ID').isMongoId(),
+  validateFields,
   check('id').custom( existsCategoryById ),
   validateFields
 ], deleteCategory);
