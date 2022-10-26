@@ -43,7 +43,7 @@ router.post('/', [
 router.put('/:id', [
   validateJWT,
   hasARole('ADMIN_ROLE', 'SALES_ROLE'),
-  check('category','that is not a mongo id').isMongoId(),
+  // check('category','that is not a mongo id').isMongoId(),
   validateFields,
   check('id').custom( existsProductById ),
   validateFields
