@@ -70,7 +70,7 @@ const putCategory = async(req, res) => {
   data.user = req.user._id;
 
   const category = await Category
-  .findOneAndUpdate(id, data, {returnOriginal: false})
+  .findOneAndUpdate({_id: id}, data, {returnOriginal: false})
   .populate('user', 'name')
 
   res.json(category);
