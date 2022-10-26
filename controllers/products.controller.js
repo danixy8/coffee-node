@@ -1,4 +1,5 @@
-const { Product } = require("../models");
+const { existsCategoryById } = require("../helpers/db-validators");
+const { Product, Category } = require("../models");
 
 //obtenerProducts - paginado - total - populate
 const getProducts = async(req, res)=>{
@@ -72,6 +73,14 @@ const putProduct = async(req, res) => {
 
   if(data.name){
     data.name = data.name.toUpperCase();
+  }
+
+  if(data.category){
+    const categoryExist = await Category.findById(id);
+    if(!categoryExist){
+      return res.status(400).json({
+        msg: 'this category does not exist'})
+    }
   }
 
   data.user = req.user._id;
