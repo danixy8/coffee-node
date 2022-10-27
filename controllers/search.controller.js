@@ -106,10 +106,18 @@ const productsByCategory = async(term = '', res) => {
       return res.status(400).json({msg: `There's no results with ${term} search term`});
     }
 
+    const products = await Product.find({
+      $or: [...categories.map(c => { return { category: c._id }})],
+      $and: [{ state: true}]
+    })
+    .select('name price description available')
+    .populate('category', 'name')
+
+    res.json({results: products})
+    
   } catch (error) {
     res.status(400).json(error)
   }
-
 }
 
 const search = (req = request, res = response) => {
