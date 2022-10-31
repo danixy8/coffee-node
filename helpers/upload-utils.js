@@ -14,17 +14,13 @@ const generateId = () => {
   return random + date
 }
 
-const uploadFile = (files, validImageExtensions = ['gif', 'jpg', 'jpeg', 'tiff', 'png', 'webp', 'bmp'], folder = '') => {
+const uploadFile = (files, folder = '') => {
 
   return new Promise((resolve, reject) => {
 
     const {file} = files;
 
     const {name, extension} = getNameAndExtension(file.name)
-
-    if(!validImageExtensions.includes(extension)){
-      return reject(`Image format not allowed. Valid image extensions: ${validImageExtensions}`)
-    }
   
     const finalName = `${name}_${generateId()}.${extension}`
   
