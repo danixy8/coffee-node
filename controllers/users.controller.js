@@ -19,6 +19,18 @@ const usersGet = async(req = request, res = response) =>{
   });
 }
 
+const userGet = async(req, res)=>{
+  
+  const { id } = req.params
+
+  const user = await User.findById(id)
+  
+  res.status(200).json({
+    user
+  });
+  
+}
+
 const userPost = async(req, res) =>{
 
   const {name, email, password, role} = req.body
@@ -72,6 +84,7 @@ const userDelete = async(req, res)=>{
 
 module.exports = {
   usersGet,
+  userGet,
   userPost,
   userPut,
   userDelete

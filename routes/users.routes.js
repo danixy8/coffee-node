@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { check, query } = require('express-validator');
-const { usersGet, userPost, userPut, userDelete } = require('../controllers/users.controller');
+const { usersGet, userPost, userPut, userDelete, userGet } = require('../controllers/users.controller');
 const { isValidRole, isValidEmail, existsUserById } = require('../helpers/db-validators');
 
 // const { validateFields } = require('../middlewares/validate-fields');
@@ -19,6 +19,13 @@ router.get('/', [
     .optional(),
   validateFields
 ],usersGet);
+
+router.get('/:id', [
+  check('id', 'Not is a valid ID').isMongoId(),
+  validateFields,
+  check('id').custom( existsUserById ),
+  validateFields
+],userGet);
 
 router.post('/', [
   check('name', 'name is required').not().isEmpty(),
